@@ -1,0 +1,84 @@
+import tkinter as tk
+
+class Calculator:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Calculator - Syed Farhanuddin Saif")
+        self.root.geometry("350x450")
+        self.root.resizable(False, False)
+        self.root.config(bg="#f0f0f0")
+
+        self.expression = ""
+        self.input_text = tk.StringVar()
+
+        # Display / Entry Field
+        self.input_field = tk.Entry(
+            self.root, 
+            font=('Arial', 20, 'bold'), 
+            textvariable=self.input_text, 
+            width=16, 
+            bg="#ffffff", 
+            bd=5, 
+            justify=tk.RIGHT
+        )
+        self.input_field.pack(ipady=10, pady=20)
+
+        # Buttons Frame
+        buttons_frame = tk.Frame(self.root, bg="#f0f0f0")
+        buttons_frame.pack()
+
+        # Row 0: Clear & Operators
+        btn_clear = tk.Button(buttons_frame, text="C", fg="white", bg="#d9534f", font=('Arial', 14, 'bold'), width=13, height=2, bd=0, cursor="hand2", command=self.clear)
+        btn_clear.grid(row=0, column=0, columnspan=2, padx=5, pady=5)
+        
+        btn_div = tk.Button(buttons_frame, text="/", fg="white", bg="#f0ad4e", font=('Arial', 14, 'bold'), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click("/"))
+        btn_div.grid(row=0, column=2, padx=5, pady=5)
+        
+        btn_mul = tk.Button(buttons_frame, text="*", fg="white", bg="#f0ad4e", font=('Arial', 14, 'bold'), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click("*"))
+        btn_mul.grid(row=0, column=3, padx=5, pady=5)
+
+        # Row 1: 7, 8, 9, -
+        tk.Button(buttons_frame, text="7", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(7)).grid(row=1, column=0, padx=5, pady=5)
+        tk.Button(buttons_frame, text="8", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(8)).grid(row=1, column=1, padx=5, pady=5)
+        tk.Button(buttons_frame, text="9", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(9)).grid(row=1, column=2, padx=5, pady=5)
+        tk.Button(buttons_frame, text="-", fg="white", bg="#f0ad4e", font=('Arial', 14, 'bold'), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click("-")).grid(row=1, column=3, padx=5, pady=5)
+
+        # Row 2: 4, 5, 6, +
+        tk.Button(buttons_frame, text="4", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(4)).grid(row=2, column=0, padx=5, pady=5)
+        tk.Button(buttons_frame, text="5", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(5)).grid(row=2, column=1, padx=5, pady=5)
+        tk.Button(buttons_frame, text="6", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(6)).grid(row=2, column=2, padx=5, pady=5)
+        tk.Button(buttons_frame, text="+", fg="white", bg="#f0ad4e", font=('Arial', 14, 'bold'), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click("+")).grid(row=2, column=3, padx=5, pady=5)
+
+        # Row 3: 1, 2, 3, = (Equals spans across row 3 and 4)
+        tk.Button(buttons_frame, text="1", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(1)).grid(row=3, column=0, padx=5, pady=5)
+        tk.Button(buttons_frame, text="2", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(2)).grid(row=3, column=1, padx=5, pady=5)
+        tk.Button(buttons_frame, text="3", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(3)).grid(row=3, column=2, padx=5, pady=5)
+        
+        btn_equal = tk.Button(buttons_frame, text="=", fg="white", bg="#5cb85c", font=('Arial', 14, 'bold'), width=6, height=5, bd=0, cursor="hand2", command=self.evaluate)
+        btn_equal.grid(row=3, column=3, rowspan=2, padx=5, pady=5)
+
+        # Row 4: 0, .
+        tk.Button(buttons_frame, text="0", fg="black", bg="white", font=('Arial', 14), width=13, height=2, bd=0, cursor="hand2", command=lambda: self.click(0)).grid(row=4, column=0, columnspan=2, padx=5, pady=5)
+        tk.Button(buttons_frame, text=".", fg="black", bg="white", font=('Arial', 14), width=6, height=2, bd=0, cursor="hand2", command=lambda: self.click(".")).grid(row=4, column=2, padx=5, pady=5)
+
+    def click(self, item):
+        self.expression = str(self.expression) + str(item)
+        self.input_text.set(self.expression)
+
+    def clear(self):
+        self.expression = ""
+        self.input_text.set("")
+
+    def evaluate(self):
+        try:
+            result = str(eval(self.expression))
+            self.input_text.set(result)
+            self.expression = result
+        except Exception:
+            self.input_text.set("Error")
+            self.expression = ""
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = Calculator(root)
+    root.mainloop()
